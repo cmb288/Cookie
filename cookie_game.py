@@ -1,6 +1,7 @@
 import pygame
 import random
 import math
+import os
 
 pygame.init()
 
@@ -21,14 +22,26 @@ font_large = pygame.font.Font(None, 80)
 font_medium = pygame.font.Font(None, 40)
 font_small = pygame.font.Font(None, 25)
 
+# Load images
+def load_image(filename, size=None):
+    try:
+        img = pygame.image.load(filename)
+        if size:
+            img = pygame.transform.scale(img, size)
+        return img
+    except:
+        return None
+
 class KrummelMonster:
     def __init__(self):
         self.x = SCREEN_WIDTH // 2
         self.y = SCREEN_HEIGHT // 2
-        self.size = 30
+        self.size = 40
         self.speed = 5
-        self.max_size = 80
-        self.min_size = 10
+        self.max_size = 100
+        self.min_size = 20
+        self.base_image = load_image("kruemmelmonster.png", (self.size * 2, self.size * 2))
+        self.current_image = self.base_image
     
     def handle_input(self, keys):
         if keys[pygame.K_LEFT]:
@@ -46,31 +59,37 @@ class KrummelMonster:
     def grow(self):
         if self.size < self.max_size:
             self.size += 5
+            self.update_image()
     
     def shrink(self):
         if self.size > self.min_size:
             self.size -= 5
+            self.update_image()
+    
+    def update_image(self):
+        if self.base_image:
+            self.current_image = pygame.transform.scale(self.base_image, (self.size * 2, self.size * 2))
     
     def draw(self, surface):
-        pygame.draw.circle(surface, (100, 150, 200), (int(self.x), int(self.y)), self.size)
-        eye_offset = self.size // 3
-        eye_size = max(3, self.size // 6)
-        pygame.draw.circle(surface, WEISS, (int(self.x - eye_offset), int(self.y - eye_offset // 2)), eye_size)
-        pygame.draw.circle(surface, WEISS, (int(self.x + eye_offset), int(self.y - eye_offset // 2)), eye_size)
-        pygame.draw.circle(surface, SCHWARZ, (int(self.x - eye_offset), int(self.y - eye_offset // 2)), eye_size // 2)
-        pygame.draw.circle(surface, SCHWARZ, (int(self.x + eye_offset), int(self.y - eye_offset // 2)), eye_size // 2)
+        if self.current_image:
+            rect = self.current_image.get_rect(center=(int(self.x), int(self.y)))
+            surface.blit(self.current_image, rect)
+        else:
+            pygame.draw.circle(surface, (100, 150, 200), (int(self.x), int(self.y)), self.size)
 
 class Cookie:
     def __init__(self):
         self.x = random.randint(50, SCREEN_WIDTH - 50)
         self.y = random.randint(50, SCREEN_HEIGHT - 50)
-        self.size = 15
+        self.size = 20
         self.vx = random.uniform(-3, 3)
         self.vy = random.uniform(-3, 3)
         self.angry = False
         self.angry_counter = 0
         self.angry_duration = 300
         self.chocolate_drops = []
+        self.base_image = load_image("cookie.png", (self.size * 2, self.size * 2))
+        self.current_image = self.base_image
     
     def update(self, monster):
         if not self.angry:
@@ -110,12 +129,18 @@ class Cookie:
                 self.chocolate_drops.clear()
     
     def shrink(self):
-        if self.size > 5:
+        if self.size > 8:
             self.size -= 3
+            self.update_image()
     
     def grow(self):
-        if self.size < 25:
+        if self.size < 35:
             self.size += 3
+            self.update_image()
+    
+    def update_image(self):
+        if self.base_image:
+            self.current_image = pygame.transform.scale(self.base_image, (self.size * 2, self.size * 2))
     
     def respawn(self):
         self.x = random.randint(50, SCREEN_WIDTH - 50)
@@ -124,16 +149,14 @@ class Cookie:
         self.vy = random.uniform(-3, 3)
     
     def draw(self, surface):
-        pygame.draw.circle(surface, (210, 140, 50), (int(self.x), int(self.y)), self.size)
-        random.seed(int(self.x) + int(self.y))
-        for i in range(8):
-            angle = (i / 8) * 2 * math.pi
-            dot_x = int(self.x + math.cos(angle) * (self.size * 0.7))
-            dot_y = int(self.y + math.sin(angle) * (self.size * 0.7))
-            pygame.draw.circle(surface, DUNKELBRAUN, (dot_x, dot_y), self.size // 4)
+        if self.current_image:
+            rect = self.current_image.get_rect(center=(int(self.x), int(self.y)))
+            surface.blit(self.current_image, rect)
+        else:
+            pygame.draw.circle(surface, (210, 140, 50), (int(self.x), int(self.y)), self.size)
         
         if self.angry:
-            pygame.draw.circle(surface, (255, 0, 0), (int(self.x), int(self.y)), self.size, 3)
+            pygame.draw.circle(surface, (255, 0, 0), (int(self.x), int(self.y)), self.size + 5, 3)
 
 class GameState:
     MENU = 1
@@ -222,7 +245,7 @@ def main():
                 cookie.shrink()
                 cookie.respawn()
                 
-                if cookie.size <= 5:
+                if cookie.size <= 8:
                     state = GameState.WON
             
             for drop in cookie.chocolate_drops[:]:
@@ -232,7 +255,7 @@ def main():
                     cookie.grow()
                     cookie.chocolate_drops.remove(drop)
                 
-                if monster.size <= 10:
+                if monster.size <= 20:
                     state = GameState.LOST
                 
                 drop['y'] += drop['vy']
