@@ -14,13 +14,13 @@ clock = pygame.time.Clock()
 HELLBRAUN = (210, 180, 140)
 DUNKELBRAUN = (101, 67, 33)
 CREMEFARBIG = (240, 230, 210)
-BLAU = (100, 150, 255)
+DUNKELBLAU = (30, 60, 120)
 SCHWARZ = (0, 0, 0)
 WEISS = (255, 255, 255)
 
-font_large = pygame.font.Font(None, 80)
-font_medium = pygame.font.Font(None, 40)
-font_small = pygame.font.Font(None, 25)
+font_large = pygame.font.Font(None, 100)
+font_medium = pygame.font.Font(None, 50)
+font_small = pygame.font.Font(None, 28)
 
 # Load images
 def load_image(filename, size=None):
@@ -36,10 +36,10 @@ class KrummelMonster:
     def __init__(self):
         self.x = SCREEN_WIDTH // 2
         self.y = SCREEN_HEIGHT // 2
-        self.size = 40
-        self.speed = 5
-        self.max_size = 100
-        self.min_size = 20
+        self.size = 60
+        self.speed = 4
+        self.max_size = 140
+        self.min_size = 30
         self.base_image = load_image("kruemmelmonster.png", (self.size * 2, self.size * 2))
         self.current_image = self.base_image
     
@@ -58,12 +58,12 @@ class KrummelMonster:
     
     def grow(self):
         if self.size < self.max_size:
-            self.size += 5
+            self.size += 3
             self.update_image()
     
     def shrink(self):
         if self.size > self.min_size:
-            self.size -= 5
+            self.size -= 3
             self.update_image()
     
     def update_image(self):
@@ -80,13 +80,13 @@ class KrummelMonster:
 class Cookie:
     def __init__(self):
         self.x = random.randint(50, SCREEN_WIDTH - 50)
-        self.y = random.randint(50, SCREEN_HEIGHT - 50)
-        self.size = 20
-        self.vx = random.uniform(-3, 3)
-        self.vy = random.uniform(-3, 3)
+        self.y = random.randint(100, SCREEN_HEIGHT - 100)
+        self.size = 35
+        self.vx = random.uniform(-2, 2)
+        self.vy = random.uniform(-2, 2)
         self.angry = False
         self.angry_counter = 0
-        self.angry_duration = 300
+        self.angry_duration = 400
         self.chocolate_drops = []
         self.base_image = load_image("cookie.png", (self.size * 2, self.size * 2))
         self.current_image = self.base_image
@@ -98,7 +98,7 @@ class Cookie:
             
             if self.x - self.size < 0 or self.x + self.size > SCREEN_WIDTH:
                 self.vx *= -1
-            if self.y - self.size < 0 or self.y + self.size > SCREEN_HEIGHT:
+            if self.y - self.size < 20 or self.y + self.size > SCREEN_HEIGHT:
                 self.vy *= -1
             
             self.x = max(self.size, min(self.x, SCREEN_WIDTH - self.size))
@@ -109,18 +109,18 @@ class Cookie:
                 self.angry_counter = 0
         
         else:
-            self.y = 40
-            self.x += self.vx
+            self.y = 50
+            self.x += self.vx * 1.5
             
             if self.x - self.size < 0 or self.x + self.size > SCREEN_WIDTH:
                 self.vx *= -1
             
-            if self.angry_counter % 10 == 0:
+            if self.angry_counter % 8 == 0:
                 self.chocolate_drops.append({
                     'x': self.x,
                     'y': self.y,
-                    'vy': random.uniform(1, 3),
-                    'vx': random.uniform(-1, 1)
+                    'vy': random.uniform(2, 4),
+                    'vx': random.uniform(-2, 2)
                 })
             
             self.angry_counter += 1
@@ -129,13 +129,13 @@ class Cookie:
                 self.chocolate_drops.clear()
     
     def shrink(self):
-        if self.size > 8:
-            self.size -= 3
+        if self.size > 12:
+            self.size -= 2
             self.update_image()
     
     def grow(self):
-        if self.size < 35:
-            self.size += 3
+        if self.size < 55:
+            self.size += 2
             self.update_image()
     
     def update_image(self):
@@ -144,9 +144,9 @@ class Cookie:
     
     def respawn(self):
         self.x = random.randint(50, SCREEN_WIDTH - 50)
-        self.y = random.randint(100, SCREEN_HEIGHT - 100)
-        self.vx = random.uniform(-3, 3)
-        self.vy = random.uniform(-3, 3)
+        self.y = random.randint(150, SCREEN_HEIGHT - 100)
+        self.vx = random.uniform(-2, 2)
+        self.vy = random.uniform(-2, 2)
     
     def draw(self, surface):
         if self.current_image:
@@ -182,32 +182,46 @@ def draw_menu(surface):
     title_rect = title_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3))
     surface.blit(title_text, title_rect)
     instruction_text = font_small.render("Spiel starten: C/c", True, DUNKELBRAUN)
-    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50))
+    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 100))
     surface.blit(instruction_text, instruction_rect)
 
 def draw_game(surface, monster, cookie):
     surface.fill(CREMEFARBIG)
+    
+    # Draw chocolate drops FIRST (so they don't cover text)
+    for drop in cookie.chocolate_drops:
+        pygame.draw.circle(surface, DUNKELBRAUN, (int(drop['x']), int(drop['y'])), 8)
+    
+    # Draw monsters and cookie on top
     monster.draw(surface)
     cookie.draw(surface)
-    for drop in cookie.chocolate_drops:
-        pygame.draw.circle(surface, DUNKELBRAUN, (int(drop['x']), int(drop['y'])), 5)
 
 def draw_won(surface):
-    surface.fill(BLAU)
-    won_text = font_large.render("Cookie aufgegessen!", True, WEISS)
-    won_rect = won_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3))
+    surface.fill(DUNKELBLAU)
+    won_text = font_large.render("Cookie", True, WEISS)
+    won_rect = won_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 - 20))
     surface.blit(won_text, won_rect)
+    
+    won_text2 = font_medium.render("aufgegessen!", True, WEISS)
+    won_rect2 = won_text2.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 + 50))
+    surface.blit(won_text2, won_rect2)
+    
     instruction_text = font_small.render("Noch einmal Spielen: O/o", True, WEISS)
-    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50))
+    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 120))
     surface.blit(instruction_text, instruction_rect)
 
 def draw_lost(surface):
     draw_cookie_background(surface)
-    lost_text = font_large.render("Game Over", True, DUNKELBRAUN)
-    lost_rect = lost_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3))
+    lost_text = font_large.render("Game", True, DUNKELBRAUN)
+    lost_rect = lost_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 - 20))
     surface.blit(lost_text, lost_rect)
+    
+    lost_text2 = font_medium.render("Over", True, DUNKELBRAUN)
+    lost_rect2 = lost_text2.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 + 50))
+    surface.blit(lost_text2, lost_rect2)
+    
     instruction_text = font_small.render("Noch einmal Spielen: O/o", True, DUNKELBRAUN)
-    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50))
+    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 120))
     surface.blit(instruction_text, instruction_rect)
 
 def main():
@@ -245,17 +259,17 @@ def main():
                 cookie.shrink()
                 cookie.respawn()
                 
-                if cookie.size <= 8:
+                if cookie.size <= 12:
                     state = GameState.WON
             
             for drop in cookie.chocolate_drops[:]:
                 dist = distance(monster.x, monster.y, drop['x'], drop['y'])
-                if dist < monster.size + 5:
+                if dist < monster.size + 8:
                     monster.shrink()
                     cookie.grow()
                     cookie.chocolate_drops.remove(drop)
                 
-                if monster.size <= 20:
+                if monster.size <= 30:
                     state = GameState.LOST
                 
                 drop['y'] += drop['vy']
