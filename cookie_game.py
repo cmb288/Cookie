@@ -180,7 +180,7 @@ def draw_menu(surface):
     title_rect = title_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3))
     surface.blit(title_text, title_rect)
     instruction_text = font_small.render("Spiel starten: C/c", True, DUNKELBRAUN)
-    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 250))
+    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50))
     surface.blit(instruction_text, instruction_rect)
 
 def draw_game(surface, monster, cookie):
@@ -201,11 +201,11 @@ def draw_won(surface):
     surface.blit(won_text, won_rect)
     
     won_text2 = font_large.render("aufgegessen!", True, WEISS)
-    won_rect2 = won_text2.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 + 50))
+    won_rect2 = won_text2.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 + 70))
     surface.blit(won_text2, won_rect2)
     
     instruction_text = font_small.render("Noch einmal Spielen: O/o", True, WEISS)
-    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 250))
+    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50))
     surface.blit(instruction_text, instruction_rect)
 
 def draw_lost(surface):
@@ -215,11 +215,11 @@ def draw_lost(surface):
     surface.blit(lost_text, lost_rect)
     
     lost_text2 = font_large.render("Over", True, DUNKELBRAUN)
-    lost_rect2 = lost_text2.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 + 50))
+    lost_rect2 = lost_text2.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 + 70))
     surface.blit(lost_text2, lost_rect2)
     
     instruction_text = font_small.render("Noch einmal Spielen: O/o", True, DUNKELBRAUN)
-    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 250))
+    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50))
     surface.blit(instruction_text, instruction_rect)
 
 def main():
