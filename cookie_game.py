@@ -18,7 +18,7 @@ SCHWARZ = (0, 0, 0)
 WEISS = (255, 255, 255)
 
 font_large = pygame.font.Font(None, 100)
-font_medium = pygame.font.Font(None, 50)
+font_medium = pygame.font.Font(None, 100)
 font_small = pygame.font.Font(None, 28)
 
 # Load images
