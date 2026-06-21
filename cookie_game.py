@@ -18,6 +18,7 @@ SCHWARZ = (0, 0, 0)
 WEISS = (255, 255, 255)
 
 font_large = pygame.font.Font(None, 100)
+font_medium = pygame.font.Font(None, 100)
 font_small = pygame.font.Font(None, 70)
 
 # Load images
@@ -200,7 +201,7 @@ def draw_won(surface):
     won_rect = won_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 - 20))
     surface.blit(won_text, won_rect)
     
-    won_text2 = font_large.render("aufgegessen!", True, WEISS)
+    won_text2 = font_medium.render("aufgegessen!", True, WEISS)
     won_rect2 = won_text2.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 + 70))
     surface.blit(won_text2, won_rect2)
     
@@ -214,7 +215,7 @@ def draw_lost(surface):
     lost_rect = lost_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 - 20))
     surface.blit(lost_text, lost_rect)
     
-    lost_text2 = font_large.render("Over", True, DUNKELBRAUN)
+    lost_text2 = font_medium.render("Over", True, DUNKELBRAUN)
     lost_rect2 = lost_text2.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 + 70))
     surface.blit(lost_text2, lost_rect2)
     
