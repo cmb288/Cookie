@@ -18,7 +18,7 @@ SCHWARZ = (0, 0, 0)
 WEISS = (255, 255, 255)
 
 font_large = pygame.font.Font(None, 100)
-font_small = pygame.font.Font(None, 50)
+font_small = pygame.font.Font(None, 70)
 
 # Load images
 def load_image(filename, size=None):
@@ -180,7 +180,7 @@ def draw_menu(surface):
     title_rect = title_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3))
     surface.blit(title_text, title_rect)
     instruction_text = font_small.render("Spiel starten: C/c", True, DUNKELBRAUN)
-    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 200))
+    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 250))
     surface.blit(instruction_text, instruction_rect)
 
 def draw_game(surface, monster, cookie):
@@ -205,7 +205,7 @@ def draw_won(surface):
     surface.blit(won_text2, won_rect2)
     
     instruction_text = font_small.render("Noch einmal Spielen: O/o", True, WEISS)
-    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 200))
+    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 250))
     surface.blit(instruction_text, instruction_rect)
 
 def draw_lost(surface):
@@ -219,7 +219,7 @@ def draw_lost(surface):
     surface.blit(lost_text2, lost_rect2)
     
     instruction_text = font_small.render("Noch einmal Spielen: O/o", True, DUNKELBRAUN)
-    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 200))
+    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 250))
     surface.blit(instruction_text, instruction_rect)
 
 def main():
