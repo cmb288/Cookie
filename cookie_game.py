@@ -18,8 +18,7 @@ SCHWARZ = (0, 0, 0)
 WEISS = (255, 255, 255)
 
 font_large = pygame.font.Font(None, 100)
-font_medium = pygame.font.Font(None, 50)
-font_small = pygame.font.Font(None, 28)
+font_small = pygame.font.Font(None, 50)
 
 # Load images
 def load_image(filename, size=None):
@@ -181,7 +180,7 @@ def draw_menu(surface):
     title_rect = title_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3))
     surface.blit(title_text, title_rect)
     instruction_text = font_small.render("Spiel starten: C/c", True, DUNKELBRAUN)
-    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 100))
+    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 200))
     surface.blit(instruction_text, instruction_rect)
 
 def draw_game(surface, monster, cookie):
@@ -201,12 +200,12 @@ def draw_won(surface):
     won_rect = won_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 - 20))
     surface.blit(won_text, won_rect)
     
-    won_text2 = font_medium.render("aufgegessen!", True, WEISS)
+    won_text2 = font_large.render("aufgegessen!", True, WEISS)
     won_rect2 = won_text2.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 + 50))
     surface.blit(won_text2, won_rect2)
     
     instruction_text = font_small.render("Noch einmal Spielen: O/o", True, WEISS)
-    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 120))
+    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 200))
     surface.blit(instruction_text, instruction_rect)
 
 def draw_lost(surface):
@@ -215,12 +214,12 @@ def draw_lost(surface):
     lost_rect = lost_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 - 20))
     surface.blit(lost_text, lost_rect)
     
-    lost_text2 = font_medium.render("Over", True, DUNKELBRAUN)
+    lost_text2 = font_large.render("Over", True, DUNKELBRAUN)
     lost_rect2 = lost_text2.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3 + 50))
     surface.blit(lost_text2, lost_rect2)
     
     instruction_text = font_small.render("Noch einmal Spielen: O/o", True, DUNKELBRAUN)
-    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 120))
+    instruction_rect = instruction_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 200))
     surface.blit(instruction_text, instruction_rect)
 
 def main():
